@@ -1,23 +1,51 @@
-/*
-Errno::ENOENT: No such file or directory @ rb_sysopen - style/styls.scss
+html {
+  height: 99.9%; }
 
-Backtrace:
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:454:in `read'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:454:in `update_stylesheet'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:209:in `each'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin/compiler.rb:294:in `watch'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/plugin.rb:109:in `method_missing'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/exec/sass_scss.rb:360:in `watch_or_update'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/exec/sass_scss.rb:51:in `process_result'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/exec/base.rb:52:in `parse'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/exec/base.rb:19:in `parse!'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.3/bin/sass:13:in `<top (required)>'
-C:/Ruby24-x64/bin/sass:23:in `load'
-C:/Ruby24-x64/bin/sass:23:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Errno::ENOENT: No such file or directory @ rb_sysopen - style/styls.scss"; }
+body {
+  height: 99.9%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.game-container {
+  position: relative;
+  margin: 10rem auto;
+  height: 35rem;
+  width: 35rem; }
+
+.row {
+  height: 33%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center; }
+
+.row-box {
+  border: 1px solid #525252;
+  height: 11rem;
+  width: 11rem;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.close {
+  border: 1px solid #95989A;
+  width: 9rem;
+  height: 9rem;
+  position: relative; }
+  .close:after {
+    content: "";
+    height: 9rem;
+    border-left: 2px solid #525252;
+    position: absolute;
+    left: 69px;
+    transform: rotate(45deg); }
+  .close:before {
+    content: "";
+    height: 9rem;
+    border-left: 2px solid #525252;
+    position: absolute;
+    left: 69px;
+    transform: rotate(-45deg); }
+
+/*# sourceMappingURL=style.css.map */
