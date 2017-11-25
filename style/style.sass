@@ -54,23 +54,24 @@ body
   align-items: center
 
 .row-box
-  border: 1px solid $dark-gray
+  border: 2px solid $dark-gray
   background-color: $light-gray
-  height: 9rem
-  width: 9rem
+  height: 8rem
+  width: 8rem
   @include centerItems
 
 // mixin for the close icon
 @mixin  closeIcon()
   content: ""
-  height: 9rem
+  height: 8rem
   border-left: 2px solid $dark-gray
   position: absolute
-  left: 69px
+  left: 2.95rem
+  top: -15px
 
 .x-icon
-  width: 9rem
-  height: 9rem
+  width: 6rem
+  height: 6rem
   position: relative
   &:after
     @include closeIcon
@@ -80,14 +81,14 @@ body
     transform: rotate(-45deg)
 
 .o-icon
-  width: 7rem
-  height: 7rem
+  width: 6rem
+  height: 6rem
   border-radius: 7rem
   border: 2px solid $dark-gray
 
 .restart
   display: block // or else margin: 0 auto won't work
-  border: 1px solid $dark-gray
+  border: 2px solid $dark-gray
   background-color: $light-gray
   position: relative
   top: 22%
@@ -98,3 +99,4 @@ body
   font: 2rem $font
   cursor: pointer
   outline: none
+  padding-bottom: 3rem
