@@ -1,5 +1,4 @@
 .idea
-/node_modules
 /misc
 .sass-cache
 /style/style.css.map
