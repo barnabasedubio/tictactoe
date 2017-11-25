@@ -1,9 +1,34 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family: Gabriola, sans-serif;
+  font-weight: 100; }
+
+h1 {
+  font-size: 3rem; }
+
+h3 {
+  font-size: 2rem; }
+
 html {
   height: 99.9%; }
 
 body {
+  border: 1px solid transparent;
   height: 99.9%;
-  margin: 0;
+  margin: 0; }
+
+.heading-text {
+  margin: 0 auto;
+  height: 6rem;
+  position: relative;
+  top: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.main-container {
+  height: 30rem;
+  position: relative;
+  top: 20%;
   display: flex;
   justify-content: center;
   align-items: center; }
@@ -11,8 +36,8 @@ body {
 .game-container {
   position: relative;
   margin: 10rem auto;
-  height: 35rem;
-  width: 35rem; }
+  height: 28rem;
+  width: 28rem; }
 
 .row {
   height: 33%;
@@ -22,30 +47,50 @@ body {
 
 .row-box {
   border: 1px solid #525252;
-  height: 11rem;
-  width: 11rem;
+  background-color: #D1D1D1;
+  height: 9rem;
+  width: 9rem;
   display: flex;
   justify-content: center;
   align-items: center; }
 
-.close {
-  border: 1px solid #95989A;
+.x-icon {
   width: 9rem;
   height: 9rem;
   position: relative; }
-  .close:after {
+  .x-icon:after {
     content: "";
     height: 9rem;
     border-left: 2px solid #525252;
     position: absolute;
     left: 69px;
     transform: rotate(45deg); }
-  .close:before {
+  .x-icon:before {
     content: "";
     height: 9rem;
     border-left: 2px solid #525252;
     position: absolute;
     left: 69px;
     transform: rotate(-45deg); }
+
+.o-icon {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 7rem;
+  border: 2px solid #525252; }
+
+.restart {
+  display: block;
+  border: 1px solid #525252;
+  background-color: #D1D1D1;
+  position: relative;
+  top: 22%;
+  width: 10rem;
+  height: 3rem;
+  margin: 0 auto;
+  text-align: center;
+  font: 2rem Gabriola, sans-serif;
+  cursor: pointer;
+  outline: none; }
 
 /*# sourceMappingURL=style.css.map */

@@ -3,43 +3,62 @@ $light-gray: #D1D1D1
 $gray: #95989A
 $dark-gray: #525252
 $background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84)
+$font: Gabriola, sans-serif
 
-@mixin setBorder($color)
-  border: 1px solid $color
-
-html
-  height: 99.9%
-  //background: $background
-
-body
-  // @include setBorder(purple)
-  height: 99.9%
-  margin: 0
+@mixin centerItems()
   display: flex
   justify-content: center
   align-items: center
 
+h1, h2, h3, h4, h5, h6
+  font-family: $font
+  font-weight: 100
+
+h1
+  font-size: 3rem
+h3
+  font-size: 2rem
+
+html
+  height: 99.9%
+//background: $background
+
+body
+  border: 1px solid transparent // so that the page doesn't scroll...wtf why does this work?
+  height: 99.9%
+  margin: 0
+
+.heading-text
+  margin: 0 auto
+  height: 6rem
+  position: relative
+  top: 15%
+  @include centerItems
+
+.main-container
+  height: 30rem
+  position: relative
+  top: 20%
+  @include centerItems
+
 .game-container
-  //@include setBorder($light-gray)
   position: relative
   margin: 10rem auto
-  height: 35rem
-  width: 35rem
+  height: 28rem
+  width: 28rem
 
 .row
-  //@include setBorder($light-gray)
   height: 33%
   display: flex
   justify-content: space-around
   align-items: center
 
 .row-box
-  @include setBorder($dark-gray)
-  height: 11rem
-  width: 11rem
-  display: flex
-  justify-content: center
-  align-items: center
+  border: 1px solid $dark-gray
+  background-color: $light-gray
+  height: 9rem
+  width: 9rem
+  @include centerItems
 
 // mixin for the close icon
 @mixin  closeIcon()
@@ -49,8 +68,7 @@ body
   position: absolute
   left: 69px
 
-.close
-  @include  setBorder($gray)
+.x-icon
   width: 9rem
   height: 9rem
   position: relative
@@ -61,3 +79,22 @@ body
     @include closeIcon
     transform: rotate(-45deg)
 
+.o-icon
+  width: 7rem
+  height: 7rem
+  border-radius: 7rem
+  border: 2px solid $dark-gray
+
+.restart
+  display: block // or else margin: 0 auto won't work
+  border: 1px solid $dark-gray
+  background-color: $light-gray
+  position: relative
+  top: 22%
+  width: 10rem
+  height: 3rem
+  margin: 0 auto
+  text-align: center
+  font: 2rem $font
+  cursor: pointer
+  outline: none
