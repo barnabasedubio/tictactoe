@@ -1,10 +1,11 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("hey");
-    $(".tilt").tilt({
-        speed: 60,
-        scale: 1.15,
-        perspective: 500,
-        glare: false,
-    });
+    var tilt = require("vanilla-tilt");
+
+    tilt.init(document.querySelectorAll(".tilt"), {
+        max: 25, // tilt angle
+        speed: 60, // reaction speed
+        scale: 1.15
+    })
 });
