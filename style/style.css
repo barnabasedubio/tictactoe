@@ -1,4 +1,5 @@
 h1, h2, h3, h4, h5, h6 {
+  color: #525252;
   font-family: Gabriola, sans-serif;
   font-weight: 100; }
 
@@ -81,10 +82,14 @@ body {
   border-radius: 7rem;
   border: 2px solid #525252; }
 
+.x-icon, .o-icon {
+  transform: translateZ(20px); }
+
 .restart {
   display: block;
   border: 2px solid #525252;
   background-color: #D1D1D1;
+  color: #525252;
   position: relative;
   top: 22%;
   width: 10rem;
@@ -95,5 +100,8 @@ body {
   cursor: pointer;
   outline: none;
   padding-bottom: 3rem; }
+
+.tilt {
+  transform-style: preserve-3d; }
 
 /*# sourceMappingURL=style.css.map */

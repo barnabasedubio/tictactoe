@@ -11,6 +11,7 @@ $font: Gabriola, sans-serif
   align-items: center
 
 h1, h2, h3, h4, h5, h6
+  color: $dark-gray
   font-family: $font
   font-weight: 100
 
@@ -86,10 +87,14 @@ body
   border-radius: 7rem
   border: 2px solid $dark-gray
 
+.x-icon, .o-icon
+  transform: translateZ(20px)
+
 .restart
   display: block // or else margin: 0 auto won't work
   border: 2px solid $dark-gray
   background-color: $light-gray
+  color: $dark-gray
   position: relative
   top: 22%
   width: 10rem
@@ -100,3 +105,6 @@ body
   cursor: pointer
   outline: none
   padding-bottom: 3rem
+
+.tilt
+  transform-style: preserve-3d
