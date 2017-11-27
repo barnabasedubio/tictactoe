@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/barnabasedubio/tictactoe/issues"
   },
-  "homepage": "https://github.com/barnabasedubio/tictactoe#readme"
+  "homepage": "https://github.com/barnabasedubio/tictactoe#readme",
+  "dependencies": {
+    "tilt.js": "^1.2.1"
+  }
 }
