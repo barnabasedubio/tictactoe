@@ -170,10 +170,40 @@ document.addEventListener("DOMContentLoaded", function () {
                         placeSymbolAtIndex(icon, 12 - (botMoveArray[0] + botMoveArray[1]));
                         gameOver();
                     }
-                    else {
+
+                    else if (playerMoveArray[1] % 2 === 1) {
+                        // all cases where players first move was to a corner and the second move was to a side
+                        if ((playerMoveArray[0] === 6 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
+                            (playerMoveArray[0] === 2 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
+                            placeSymbolAtIndex(icon, 0);
+                        }
+                        if ((playerMoveArray[0] === 8 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
+                            (playerMoveArray[0] === 0 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
+                            placeSymbolAtIndex(icon, 2);
+                        }
+                        if ((playerMoveArray[0] === 0 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
+                            (playerMoveArray[0] === 8 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
+                            placeSymbolAtIndex(icon, 6);
+                        }
+                        if ((playerMoveArray[0] === 2 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
+                            (playerMoveArray[0] === 6 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
+                            placeSymbolAtIndex(icon, 8);
+                        }
 
                     }
-                    // TODO check if player is in a match-point-position and diffuse if necessary
+                    else  { // player placed symbol in corner field
+                        if (playerMoveArray[0] % 2 === 1) {
+                            /* if the players firs move was a side move, the only way to reach this code is if
+                             * the player is countering the bot's attempt to win. That will in turn put the player
+                             * in a position to win, and if the bot counters that position, the game is pretty much over. */
+                            if (botMoveArray[1] === 0) placeSymbolAtIndex(icon, 2);
+                            if (botMoveArray[1] === 2) placeSymbolAtIndex(icon, 8);
+                            if (botMoveArray[1] === 6) placeSymbolAtIndex(icon, 0);
+                            if (botMoveArray[1] === 8) placeSymbolAtIndex(icon, 6);
+                        } else {
+                            // player played both moves in corners, is now in match position -> counter
+                        }
+                    }
 
 
             }
