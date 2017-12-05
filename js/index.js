@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateGameState(iconType, index) {
         gameStateArray[index] = (iconType === "x-icon") ? "x" : "o";
-        console.log(gameStateArray)
+        // console.log(gameStateArray)
     }
     // based on the game state, perform best possible move
     function botTurn() {
@@ -82,19 +82,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 case 0:
                     placeSymbolAtIndex(icon, 4);
                     botMoveArray.push(4);
+                    console.log(botMoveArray);
                     break;
+
                 case 2:
                     let indexOfPlayer = parseInt(getIndex());
                     if (indexOfPlayer % 2 === 1) {
                         // player placed o in a side field -> will lose match
                         placeSymbolAtIndex(icon, (indexOfPlayer + 5) % 10);
                         botMoveArray.push((indexOfPlayer + 5) % 10);
+                        console.log(botMoveArray);
                     } else {
                         // player placed o in diagonal field -> can still tie match
                         placeSymbolAtIndex(icon, 16 - (indexOfPlayer + 8)); // diagonally away from player
                         botMoveArray.push(16 - (indexOfPlayer + 8));
+                        console.log(botMoveArray);
                     }
                     break;
+
                 case 4:
                     // check if in a match point position
                     if (checkIfEmpty(12 - (botMoveArray[0] + botMoveArray[1]))) {
@@ -107,18 +112,26 @@ document.addEventListener("DOMContentLoaded", function () {
                         if ((playerMoveArray[0] === 6 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 2 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 0);
+                            botMoveArray.push(0);
+                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 8 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 0 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 2);
+                            botMoveArray.push(2);
+                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 0 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 8 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 6);
+                            botMoveArray.push(6);
+                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 2 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 6 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 8);
+                            botMoveArray.push(8);
+                            console.log(botMoveArray);
                         }
 
                     }
@@ -127,14 +140,34 @@ document.addEventListener("DOMContentLoaded", function () {
                             /* if the players firs move was a side move, the only way to reach this code is if
                              * the player is countering the bot's attempt to win. That will in turn put the player
                              * in a position to win, and if the bot counters that position, the game is pretty much over. */
-                            if (botMoveArray[1] === 0) placeSymbolAtIndex(icon, 2);
-                            if (botMoveArray[1] === 2) placeSymbolAtIndex(icon, 8);
-                            if (botMoveArray[1] === 6) placeSymbolAtIndex(icon, 0);
-                            if (botMoveArray[1] === 8) placeSymbolAtIndex(icon, 6);
+                            let position = (botMoveArray[1] === 0 || botMoveArray[1] === 8) ?
+                                botMoveArray[1] - botMoveArray[0] : botMoveArray[1] + botMoveArray[0];
+                            placeSymbolAtIndex(icon, (Math.abs(position)+2) % 12);
+                            botMoveArray.push((Math.abs(position)+2) % 12);
+                            console.log(botMoveArray);
                         } else {
                             // player played both moves in corners, is now in match position -> counter
+                            placeSymbolAtIndex(icon, Math.floor((playerMoveArray[0] + playerMoveArray[1]) / 2));
+                            botMoveArray.push(Math.floor((playerMoveArray[0] + playerMoveArray[1]) / 2));
+                            console.log(botMoveArray);
                         }
                     }
+                    break;
+
+                case 6:
+                    /* finish off all cases where the first move of the player was to the side or first was to the corner and second was to the side */
+                    console.log(botMoveArray[1], botMoveArray[2]);
+                    if (isInt((botMoveArray[1] + botMoveArray[2]) / 2) && checkIfEmpty((botMoveArray[1] + botMoveArray[2]) / 2)) { // check if field between second and third move is free -> game over
+                        placeSymbolAtIndex(icon, (botMoveArray[1] + botMoveArray[2]) / 2);
+                        console.log("placed finishing move on " + (botMoveArray[1] + botMoveArray[2]) / 2);
+                        gameOver();
+
+                    } else if (checkIfEmpty(12 - (botMoveArray[2] + botMoveArray[0]))) { // check if field following first and third move is free -> game over
+                        console.log("about to win.. targeting index " + (12 - (botMoveArray[2] + botMoveArray[0])));
+                        placeSymbolAtIndex(icon, 12 - (botMoveArray[2] + botMoveArray[0]));
+                        gameOver();
+                    }
+
 
 
             }
@@ -146,8 +179,12 @@ document.addEventListener("DOMContentLoaded", function () {
         moveRound++;
     }
 
+    function isInt(num) {
+        console.log("in isInt function....number: " + num);
+        return num % 1 === 0;
+    }
+
     function checkIfEmpty(index) {
-        console.log("in checkifempty... index: " + index);
         // check if box element corresponding to index has a symbol in it
         if (boxes[index].children.length === 0) {
             console.log("we win!");
