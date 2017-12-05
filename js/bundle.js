@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // check if in a match point position
                     if (checkIfEmpty(12 - (botMoveArray[0] + botMoveArray[1]))) {
                         placeSymbolAtIndex(icon, 12 - (botMoveArray[0] + botMoveArray[1]));
-                        gameOver();
+                        gameOver("win");
                     }
 
                     else if (playerMoveArray[1] % 2 === 1) {
@@ -225,18 +225,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 case 6:
                     /* finish off all cases where the first move of the player was to the side or first was to the corner and second was to the side */
-                    console.log(botMoveArray[1], botMoveArray[2]);
                     if (isInt((botMoveArray[1] + botMoveArray[2]) / 2) && checkIfEmpty((botMoveArray[1] + botMoveArray[2]) / 2)) { // check if field between second and third move is free -> game over
                         placeSymbolAtIndex(icon, (botMoveArray[1] + botMoveArray[2]) / 2);
                         console.log("placed finishing move on " + (botMoveArray[1] + botMoveArray[2]) / 2);
-                        gameOver();
+                        gameOver("win");
 
                     } else if (checkIfEmpty(12 - (botMoveArray[2] + botMoveArray[0]))) { // check if field following first and third move is free -> game over
                         console.log("about to win.. targeting index " + (12 - (botMoveArray[2] + botMoveArray[0])));
                         placeSymbolAtIndex(icon, 12 - (botMoveArray[2] + botMoveArray[0]));
-                        gameOver();
+                        gameOver("win");
                     }
 
+                    else {
+                        /* at this point, only two sides and a corner are still available. Play to one of the sides to still have a chance to win*/
+                        for (let i = 1; i < 9; i+= 2) {
+                            if (checkIfEmpty(i)) {
+                                placeSymbolAtIndex(icon, i);
+                                botMoveArray.push(i);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                case 8:
+                    // check if in match point position
+                    if (checkIfEmpty(12 - (botMoveArray[0] + botMoveArray[3]))) {
+                        placeSymbolAtIndex(icon, 12 - (botMoveArray[0] + botMoveArray[3]));
+                        gameOver("win");
+                    }
+                    else {
+                        // it's going to be a tie.
+                        for (let i = 0; i < 9; i += 2) {
+                            if (checkIfEmpty(i)) {
+                                placeSymbolAtIndex(icon, i);
+                                botMoveArray.push(i);
+                                gameOver("tie");
+                                break;
+                            }
+                        }
+                    }
 
 
             }
@@ -249,14 +277,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function isInt(num) {
-        console.log("in isInt function....number: " + num);
         return num % 1 === 0;
     }
 
     function checkIfEmpty(index) {
         // check if box element corresponding to index has a symbol in it
         if (boxes[index].children.length === 0) {
-            console.log("we win!");
             return true;
         }
         console.log("already occupied");
@@ -284,7 +310,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function gameOver() {}
+    function gameOver(type) {
+        if (type === "win") console.log("bot wins");
+        else console.log("it's a tie");
+    }
 
     // TODO: landing page screen
 });
