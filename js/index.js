@@ -27,8 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     } */
 
-    let playerBegins = false;
-    let playerTurn = false;
+    let playerBegins = true;
+    let playerTurn;
+
+    let corners = [0, 2, 6, 8];
 
     let moveRound = 0; // represents round one is in (or round a move was made)
 
@@ -67,6 +69,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 botTurn()
             }
         });
+    });
+
+    let restart = document.getElementsByClassName("restart")[0];
+    let i = 0;
+    restart.addEventListener("click", function() {
+        console.log(++i);
     });
 
     function updateGameState(iconType, index) {
@@ -113,25 +121,21 @@ document.addEventListener("DOMContentLoaded", function () {
                             (playerMoveArray[0] === 2 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 0);
                             botMoveArray.push(0);
-                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 8 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 0 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 2);
                             botMoveArray.push(2);
-                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 0 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 8 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 6);
                             botMoveArray.push(6);
-                            console.log(botMoveArray);
                         }
                         if ((playerMoveArray[0] === 2 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
                             (playerMoveArray[0] === 6 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
                             placeSymbolAtIndex(icon, 8);
                             botMoveArray.push(8);
-                            console.log(botMoveArray);
                         }
 
                     }
@@ -196,11 +200,22 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         }
                     }
-
-
             }
         } else {
             let icon = "o-icon";
+            switch (moveRound) {
+                case 1:
+                    if (playerMoveArray[0] === 4) {
+                        // chose a random corner to play in
+                        let cornerPosition = corners[Math.floor(Math.random() * corners.length)];
+                        placeSymbolAtIndex(icon, cornerPosition);
+                        botMoveArray.push(cornerPosition);
+                    }
+                    else {
+                        placeSymbolAtIndex(icon, 4);
+                        botMoveArray.push(4);
+                    }
+            }
         }
         // toggleTilt(true);
         playerTurn = true;
