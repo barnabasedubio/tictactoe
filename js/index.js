@@ -215,6 +215,36 @@ document.addEventListener("DOMContentLoaded", function () {
                         placeSymbolAtIndex(icon, 4);
                         botMoveArray.push(4);
                     }
+                    break;
+
+                case 3:
+                    if (playerMoveArray[0] === 4) { // player's first move was to the center
+                        if (playerMoveArray[1] % 2 === 1) {
+                            // player plays to an edge. Every position is a match point for the player -> countering might put you in a match point
+                            let position = 3*playerMoveArray[0] - (playerMoveArray[0] + playerMoveArray[1]);
+                            placeSymbolAtIndex(icon, position);
+
+                        } else {
+                            // player plays to a corner.
+                            if (playerMoveArray[1] === 12 - (botMoveArray[0] + playerMoveArray[0])) {
+                                // player plays to the least harmful corner. You can be aggressive and enter a match point.
+                                if (botMoveArray[0] === 8) placeSymbolAtIndex(icon, 2);
+                                if (botMoveArray[0] === 6) placeSymbolAtIndex(icon, 8);
+                                if (botMoveArray[0] === 2) placeSymbolAtIndex(icon, 0);
+                                if (botMoveArray[0] === 0) placeSymbolAtIndex(icon, 6);
+
+                            } else {
+                                // diagonal match point for the player. countering it will put you in a match point.
+                                placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[1]))
+                            }
+                        }
+
+                    } else if (playerMoveArray[0] % 2 === 0) { // player's first move was diagonal
+
+                    } else { // player's first move was an edge
+
+                    }
+                    break;
             }
         }
         // toggleTilt(true);
