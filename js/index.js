@@ -30,7 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let playerBegins = true;
     let playerTurn;
 
-    let corners = [0, 2, 6, 8];
+    let corners = [0, 2, 6, 8],
+        edges   = [1, 3, 5, 7];
 
     let moveRound = 0; // represents round one is in (or round a move was made)
 
@@ -116,27 +117,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     else if (playerMoveArray[1] % 2 === 1) {
+                        let counterPosition;
+                        let move1 = playerMoveArray[0];
+                        let move2 = playerMoveArray[1];
+
                         // all cases where players first move was to a corner and the second move was to a side
-                        if ((playerMoveArray[0] === 6 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
-                            (playerMoveArray[0] === 2 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
-                            placeSymbolAtIndex(icon, 0);
-                            botMoveArray.push(0);
-                        }
-                        if ((playerMoveArray[0] === 8 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
-                            (playerMoveArray[0] === 0 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
-                            placeSymbolAtIndex(icon, 2);
-                            botMoveArray.push(2);
-                        }
-                        if ((playerMoveArray[0] === 0 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
-                            (playerMoveArray[0] === 8 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
-                            placeSymbolAtIndex(icon, 6);
-                            botMoveArray.push(6);
-                        }
-                        if ((playerMoveArray[0] === 2 && (playerMoveArray[1] === 3 || playerMoveArray[1] === 5)) ||
-                            (playerMoveArray[0] === 6 && (playerMoveArray[1] === 1 || playerMoveArray[1] === 7))) {
-                            placeSymbolAtIndex(icon, 8);
-                            botMoveArray.push(8);
-                        }
+                        if ((move1 === 6 && (move2 === 3 || move2 === 5)) ||
+                            (move1 === 2 && (move2 === 1 || move2 === 7))) counterPosition = 0;
+
+                        if ((move1 === 8 && (move2 === 3 || move2 === 5)) ||
+                            (move1 === 0 && (move2 === 1 || move2 === 7))) counterPosition = 2;
+
+                        if ((move1 === 0 && (move2 === 3 || move2 === 5)) ||
+                            (move1 === 8 && (move2 === 1 || move2 === 7))) counterPosition = 6;
+
+                        if ((move1 === 2 && (move2 === 3 || move2 === 5)) ||
+                            (move1 === 6 && (move2 === 1 || move2 === 7))) counterPosition = 8;
+
+                        placeSymbolAtIndex(icon, counterPosition);
+                        botMoveArray.push(counterPosition);
 
                     }
                     else  { // player placed symbol in corner field
@@ -223,23 +222,55 @@ document.addEventListener("DOMContentLoaded", function () {
                             // player plays to an edge. Every position is a match point for the player -> countering might put you in a match point
                             let position = 3*playerMoveArray[0] - (playerMoveArray[0] + playerMoveArray[1]);
                             placeSymbolAtIndex(icon, position);
+                            botMoveArray.push(position);
 
                         } else {
                             // player plays to a corner.
                             if (playerMoveArray[1] === 12 - (botMoveArray[0] + playerMoveArray[0])) {
                                 // player plays to the least harmful corner. You can be aggressive and enter a match point.
-                                if (botMoveArray[0] === 8) placeSymbolAtIndex(icon, 2);
-                                if (botMoveArray[0] === 6) placeSymbolAtIndex(icon, 8);
-                                if (botMoveArray[0] === 2) placeSymbolAtIndex(icon, 0);
-                                if (botMoveArray[0] === 0) placeSymbolAtIndex(icon, 6);
+                                let targetPosition;
+                                if (botMoveArray[0] === 2) targetPosition = 0;
+                                if (botMoveArray[0] === 8) targetPosition = 2;
+                                if (botMoveArray[0] === 0) targetPosition = 6;
+                                if (botMoveArray[0] === 6) targetPosition = 8;
+
+                                placeSymbolAtIndex(icon, targetPosition);
+                                botMoveArray.push(targetPosition)
 
                             } else {
                                 // diagonal match point for the player. countering it will put you in a match point.
-                                placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[1]))
+                                placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[1]));
+                                botMoveArray.push(12 - (playerMoveArray[0] + playerMoveArray[1]));
                             }
                         }
 
                     } else if (playerMoveArray[0] % 2 === 0) { // player's first move was diagonal
+                        if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                            // X--O--X diagonal position --> do NOT play in the corner. any edge is fine.
+                            let edgePosition = edges[Math.floor(Math.random() * edges.length)];
+                            placeSymbolAtIndex(icon, edgePosition);
+                            botMoveArray.push(edgePosition);
+                        }
+                        else if (playerMoveArray[1] % 2 === 0) {
+                            // player on two adjacent diagonals, in match point position -> counter
+                            let counterPosition = (playerMoveArray[0] + playerMoveArray[1]) / 2;
+                            placeSymbolAtIndex(icon, counterPosition);
+                            botMoveArray.push(counterPosition);
+                        }
+                        else {
+                            // player plays to an edge
+                            let counterPosition;
+                            let move1 = playerMoveArray[0];
+                            let move2 = playerMoveArray[1];
+
+                            // all cases where players first move was to a corner and the second move was to a side
+                            if ((move1 === 6 || move1 === 2) && (move2 === 1 || move2 === 3)) counterPosition = 0;
+                            if ((move1 === 8 || move1 === 0) && (move2 === 1 || move2 === 5)) counterPosition = 2;
+                            if ((move1 === 8 || move1 === 0) && (move2 === 3 || move2 === 7)) counterPosition = 6;
+                            if ((move1 === 2 || move1 === 6) && (move2 === 5 || move2 === 7)) counterPosition = 8;
+                            placeSymbolAtIndex(icon, counterPosition);
+                            botMoveArray.push(counterPosition);
+                        }
 
                     } else { // player's first move was an edge
 
