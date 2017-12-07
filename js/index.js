@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let playerBegins = true;
     let playerTurn;
 
-    let corners = [0, 2, 6, 8],
-        edges   = [1, 3, 5, 7];
+    let corners = [0, 2, 6, 8];
 
     let moveRound = 0; // represents round one is in (or round a move was made)
 
@@ -200,7 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
             }
-        } else {
+        } else { // player begins match
+
             let icon = "o-icon";
             switch (moveRound) {
                 case 1:
@@ -246,10 +246,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     } else if (playerMoveArray[0] % 2 === 0) { // player's first move was diagonal
                         if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
-                            // X--O--X diagonal position --> do NOT play in the corner. any edge is fine.
-                            let edgePosition = edges[Math.floor(Math.random() * edges.length)];
-                            placeSymbolAtIndex(icon, edgePosition);
-                            botMoveArray.push(edgePosition);
+
+                            for (let i = 1; i < 9; i += 2) {
+                                if (checkIfEmpty(i)) {
+                                    placeSymbolAtIndex(icon, i);
+                                    botMoveArray.push(i);
+                                    break;
+                                }
+                            }
                         }
                         else if (playerMoveArray[1] % 2 === 0) {
                             // player on two adjacent diagonals, in match point position -> counter
@@ -300,12 +304,155 @@ document.addEventListener("DOMContentLoaded", function () {
                             // player plays to one of the other sides -> place O in diagonal between the two Xs
                             let cornerCounterPosition = (playerMoveArray[0] + playerMoveArray[1]) - 4;
                             placeSymbolAtIndex(icon, cornerCounterPosition);
+                            botMoveArray.push(cornerCounterPosition);
                         }
                     }
                     break;
 
                 case 5:
-                    
+
+                    // check if I can win the game
+                    // can only win diagonally if you placed icon in the middle field
+                    if (botMoveArray[0] === 4) {
+                        if (checkIfEmpty(12 - (botMoveArray[0] + botMoveArray[1]))) {
+                            placeSymbolAtIndex(icon, 12 - (botMoveArray[0] + botMoveArray[1]));
+                            gameOver("win");
+                            break;
+                        }
+                    // check if i can win by filling field between my other symbols
+                    } else if (isInt((botMoveArray[0] + botMoveArray[1]) / 2)) {
+                        if (checkIfEmpty((botMoveArray[0] + botMoveArray[1]) / 2)) {
+                            placeSymbolAtIndex(icon, (botMoveArray[0] + botMoveArray[1]) / 2);
+                            gameOver("win");
+                            break;
+                        }
+
+                    } else {
+                        // check if i can win by straight line in the field
+                        let targetPosition = (botMoveArray[1] * 3 - (botMoveArray[0] + botMoveArray[1])) % 10;
+                        console.log("potential winning index: " + targetPosition);
+                        if (targetPosition >= 0 && checkIfEmpty(targetPosition)) {
+                            placeSymbolAtIndex(icon, targetPosition);
+                            gameOver("win");
+                            break;
+                        }
+                    }
+
+                    console.log("test");
+
+                    // if player started in the middle
+                    if (playerMoveArray[0] === 4) {
+                        console.log("first move: center");
+                        if (playerMoveArray[1] % 2 === 1) {  // 1. case: player went to the side afterwards, which means i countered it
+                            if (playerMoveArray[2] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                                // 1.1: player played to far diagonal -> play to the corner where there is nothing in between my other corner symbol
+                                let move1 = botMoveArray[0];
+                                let move2 = botMoveArray[1];
+                                let position;
+                                if ((move1 === 6 && move2 === 5) || (move1 === 2 && move2 === 7)) position = 8;
+                                if ((move1 === 0 && move2 === 7) || (move1 === 8 && move2 === 3)) position = 6;
+                                if ((move1 === 8 && move2 === 1) || (move1 === 0 && move2 === 5)) position = 2;
+                                if ((move1 === 6 && move2 === 1) || (move1 === 2 && move2 === 3)) position = 0;
+
+                                placeSymbolAtIndex(icon, position);
+                                botMoveArray.push(position);
+                            }
+                            else if (playerMoveArray[2] % 2 === 0) {
+                                // 1.2: player played to close diagonal -> in a match point now -> counter
+                                placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[2]));
+                                botMoveArray.push(12 - (playerMoveArray[0] + playerMoveArray[2]));
+                            }
+                            else {
+                                // 1.3: player played to the side again, now in match point -> counter
+                                let position = 12 - (playerMoveArray[0] + playerMoveArray[2]);
+                                placeSymbolAtIndex(icon, position);
+                                botMoveArray.push(position);
+                            }
+                        } else if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                            // 2. case: player went to "harmless" diagonal afterwards, which means i made aggressive move
+                            // reaching this code means the player countered, which means player is in match position
+                            placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[2]));
+                            botMoveArray.push(12 - (playerMoveArray[0] + playerMoveArray[2]));
+                        } else {
+                            // 3. case: player went to a match point diagonal afterwards, which means i countered it (and thus put myself in a match point position)
+                            // player countering my match point means he is in a match point with the recently placed symbol and his first one
+                            placeSymbolAtIndex(icon, 12 - (playerMoveArray[0] + playerMoveArray[2]));
+                            botMoveArray.push(12 - (playerMoveArray[0] + playerMoveArray[2]));
+                        }
+
+                    } else if (playerMoveArray[0] % 2 === 0) { // if player started diagonally
+                        console.log("first move: diagonal");
+                        if (playerMoveArray[1] % 2 === 0) {
+                            console.log("second move: diagonal");
+                            // every following diagonal move by the player resulted in a match point for me.
+                            // reaching this code means the player countered it. However, player is only in a match point
+                            // if they played their second symbol on the far diagonal.
+                            if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                                // match point for the player -> counter
+
+                                // depending on where the bot plays the circle (since it's semi random) and the player counters,
+                                // bot either re-counters with players 2 and 3rd move or first and third move
+
+                                if (playerMoveArray[0] === 6 || playerMoveArray[0] === 8) {
+                                    placeSymbolAtIndex(icon, 3 * playerMoveArray[2] - (playerMoveArray[0] + playerMoveArray[2]));
+                                    botMoveArray.push(3 * playerMoveArray[2] - (playerMoveArray[0] + playerMoveArray[2]));
+
+                                } else {
+                                    placeSymbolAtIndex(icon, 3 * playerMoveArray[2] - (playerMoveArray[1] + playerMoveArray[2]));
+                                    botMoveArray.push(3 * playerMoveArray[2] - (playerMoveArray[1] + playerMoveArray[2]));
+                                }
+                            } else {
+                                // choose the nearest edge
+                                for (let i = 1; i < 9; i += 2) {
+                                    if (checkIfEmpty(i)) {
+                                        placeSymbolAtIndex(icon, i);
+                                        botMoveArray.push(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (playerMoveArray[1] % 2 === 1) { // the next move was on an edge
+                            console.log("second move: edge");
+                            // no matter to what field the player played, I am in a match point position. Reaching this code
+                            // means the player countered it. putting themselves in a match point between the first and the third
+                            let position = (playerMoveArray[0] + playerMoveArray[2]) / 2;
+                            placeSymbolAtIndex(icon, position);
+                            botMoveArray.push(position);
+                        }
+
+                    } else { // player started from the side
+                        console.log("first move: edge");
+                        if (playerMoveArray[1] % 2 === 0) {  // case 1: second move is to diagonal field
+                            // I would always be in match position if this happened. reaching this code means
+                            // the player countered, putting themselves in a match point between the second and third move
+                            let position = (playerMoveArray[1] + playerMoveArray[2]) / 2;
+                            placeSymbolAtIndex(icon, position);
+                            botMoveArray.push(position);
+                        }
+                        // case 2: second move is to opposite edge field (player lost when doing this). Reaching this code
+                        // means they countered, trying (and failing) to prevent the inevitable...
+                        else if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                            if (playerMoveArray[2] === 5) placeSymbolAtIndex(icon, 6);
+                            if (playerMoveArray[2] === 7) placeSymbolAtIndex(icon, 0);
+                        } else {
+                            // case 3: second move is to adjacent edge field. choose any of the remaining diagonals
+                            for (let i = 0; i < 9; i += 2) {
+                                if (checkIfEmpty(i)) {
+                                    placeSymbolAtIndex(icon, i);
+                                    botMoveArray.push(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+
+                case 7: // last move the bot is going to make (phew)
+
+                    // check for wins
+
             }
         }
         // toggleTilt(true);
@@ -348,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function gameOver(type) {
-        if (type === "win") console.log("bot wins");
+        if (type === "win") console.log("bot wins BOOYAH");
         else console.log("it's a tie");
     }
 
