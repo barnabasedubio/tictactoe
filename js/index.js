@@ -273,9 +273,39 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                     } else { // player's first move was an edge
+                        if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
+                            // X--O--X straight position -> bot wins by playing any one of the remaining sides
+                            for (let i = 1; i < 9; i += 2) {
+                                if (checkIfEmpty(i)) {
+                                    placeSymbolAtIndex(icon, i);
+                                    botMoveArray.push(i);
+                                    break;
+                                }
+                            }
+                        } else if (playerMoveArray[1] % 2 === 0) {  // all counters to player playing it in a diagonal field
 
+                            let counterPosition;
+                            let move1 = playerMoveArray[0];
+                            let move2 = playerMoveArray[1];
+
+                            // all cases where players first move was to a side and the second move was to a corner
+                            if ((move1 === 1 || move1 === 3) && (move2 === 6 || move2 === 2)) counterPosition = 0;
+                            if ((move1 === 1 || move1 === 5) && (move2 === 0 || move2 === 8)) counterPosition = 2;
+                            if ((move1 === 7 || move1 === 3) && (move2 === 0 || move2 === 8)) counterPosition = 6;
+                            if ((move1 === 7 || move1 === 5) && (move2 === 6 || move2 === 2)) counterPosition = 8;
+                            placeSymbolAtIndex(icon, counterPosition);
+                            botMoveArray.push(counterPosition);
+
+                        } else {
+                            // player plays to one of the other sides -> place O in diagonal between the two Xs
+                            let cornerCounterPosition = (playerMoveArray[0] + playerMoveArray[1]) - 4;
+                            placeSymbolAtIndex(icon, cornerCounterPosition);
+                        }
                     }
                     break;
+
+                case 5:
+                    
             }
         }
         // toggleTilt(true);
