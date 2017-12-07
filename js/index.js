@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } */
 
     let playerBegins = true;
+    let gameIsOver = false;
     let playerTurn;
 
     let corners = [0, 2, 6, 8];
@@ -433,8 +434,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         // case 2: second move is to opposite edge field (player lost when doing this). Reaching this code
                         // means they countered, trying (and failing) to prevent the inevitable...
                         else if (playerMoveArray[1] === 12 - (playerMoveArray[0] + botMoveArray[0])) {
-                            if (playerMoveArray[2] === 5) placeSymbolAtIndex(icon, 6);
-                            if (playerMoveArray[2] === 7) placeSymbolAtIndex(icon, 0);
+                            if (playerMoveArray[2] === 5) {
+                                placeSymbolAtIndex(icon, 6);
+                                botMoveArray.push(6);
+                            }
+                            if (playerMoveArray[2] === 7) {
+                                placeSymbolAtIndex(icon, 0);
+                                botMoveArray.push(0);
+                            }
                         } else {
                             // case 3: second move is to adjacent edge field. choose any of the remaining diagonals
                             for (let i = 0; i < 9; i += 2) {
@@ -451,7 +458,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 case 7: // last move the bot is going to make (phew)
 
-                    // check for wins
+                    // 1. check for all possible options if players first move was to the side
+                    if (playerMoveArray[0] % 2 === 1) {
+                        let position = 12 - (botMoveArray[0] + botMoveArray[2]);
+                        console.log("position: " + position);
+                        if ( position >= 0 && position < 9 && checkIfEmpty(position)) {
+                            placeSymbolAtIndex(icon, position);
+                            gameOver("win");
+                            break;
+                        }
+                        position = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
+                        console.log("position: " + position);
+                        if (position !== 1 && position >= 0 && position < 9 && checkIfEmpty(position)) {
+                            // position !== 1 because of some fucking edge case >.<
+                            placeSymbolAtIndex(icon, position);
+                            gameOver("win");
+                            break;
+                        }
+                        if (playerMoveArray[1] % 2 === 0 && playerMoveArray[2] % 2 === 0) {
+                            if (playerMoveArray[3] % 2 === 1) {
+                                // place in last remaining corner
+                                for (let i = 0; i < 9; i += 2) {
+                                    if (checkIfEmpty(i)) {
+                                        placeSymbolAtIndex(icon, i);
+                                        botMoveArray.push(i);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                // last match point for the placer -> counter
+                                let position = (playerMoveArray[2] + playerMoveArray[3]) / 2;
+                                placeSymbolAtIndex(icon, position);
+                                botMoveArray.push(position);
+                            }
+                        }
+                        else if (playerMoveArray[1] % 2 === 1 && playerMoveArray[2] % 2 === 0) { // side -> side -> corner
+                            // reaching this code means player countered my match point, puting themselves in a match point
+                            // between 3 and 4th move
+                            let position = (playerMoveArray[2] + playerMoveArray[3]) / 2;
+                            placeSymbolAtIndex(icon, position);
+                            botMoveArray.push(position);
+                        }
+                    }
+
 
             }
         }
@@ -497,6 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function gameOver(type) {
         if (type === "win") console.log("bot wins BOOYAH");
         else console.log("it's a tie");
+        gameIsOver = true;
     }
 
     // TODO: landing page screen
