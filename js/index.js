@@ -601,6 +601,31 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
+                    else if (playerMoveArray[0] === 4) {
+                        // the final stretch. The only way the player can win is through the middle
+                        if (playerMoveArray[1] % 2 === 0) {
+                            // player plays to a diagonal, really easy case, just choose any edge.
+                            for (let i = 1; i < 9; i += 2) {
+                                if (checkIfEmpty(i)) {
+                                    placeSymbolAtIndex(icon, i);
+                                    botMoveArray.push(i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            // just check if at this point there is any potential match point, and counter.
+                            for (let i = 0; i < 9; i++) {
+                                if (i === 4) continue;
+                                if (gameStateArray[i] === "x") {
+                                    if (checkIfEmpty(12 - (4 + i))) {
+                                        placeSymbolAtIndex(icon, 12 - (4 + i));
+                                        botMoveArray.push(12 - (4 + i));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
             }
         }
         // toggleTilt(true);
