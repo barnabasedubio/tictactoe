@@ -27,7 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     } */
 
-    let playerBegins = true;
+    let heading = document.getElementById("heading_text");
+
+    let playerBegins = false;
     let gameIsOver = false;
     let playerTurn;
 
@@ -621,12 +623,14 @@ document.addEventListener("DOMContentLoaded", function () {
                                 gameOver("win");
                                 break;
                             }
+
                             let position2 = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
                             if (position2 >= 0 && position2 < 9 && checkIfEmpty(position2)) {
                                 placeSymbolAtIndex(icon, position2);
                                 gameOver("win");
                                 break;
                             }
+
                             let position3 = 3 * botMoveArray[2] - (botMoveArray[2] + botMoveArray[0]);
                             if (position3 >= 0 && position3 < 9 && checkIfEmpty(position3)) {
                                 placeSymbolAtIndex(icon, position3);
@@ -690,8 +694,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function gameOver(type) {
-        if (type === "win") console.log("bot wins BOOYAH");
-        else console.log("it's a tie");
+        if (type === "win") {
+            console.log("bot wins BOOYAH");
+            heading.textContent = "Bot wins";
+        }
+        else {
+            console.log("it's a tie");
+            heading.textContent = "It's a tie";
+        }
         gameIsOver = true;
     }
 
@@ -706,13 +716,16 @@ document.addEventListener("DOMContentLoaded", function () {
         while (oIcons[0]) {
             oIcons[0].parentNode.removeChild(oIcons[0]);
         }
-        for (let entry of gameStateArray) {
-            entry = " ";
-        }
+
+        gameStateArray.fill(" ");
         playerMoveArray = [];
         botMoveArray = [];
         moveRound = 0;
         gameIsOver = false;
+
+        if (!playerBegins) botTurn();
+
+        heading.textContent = "TICTACTOE";
     }
 
     // TODO: landing page screen
