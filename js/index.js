@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     } */
 
-    let heading = document.getElementById("heading_text");
-
-    let playerBegins = false;
+    let playerBegins = true;
     let gameIsOver = false;
     let playerTurn;
 
@@ -696,11 +694,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function gameOver(type) {
         if (type === "win") {
             console.log("bot wins BOOYAH");
-            heading.textContent = "Bot wins";
+            document.getElementById("heading_text").textContent = "Bot wins!";
         }
         else {
             console.log("it's a tie");
-            heading.textContent = "It's a tie";
+            document.getElementById("heading_text").textContent = "Tie game.";
         }
         gameIsOver = true;
     }
@@ -725,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!playerBegins) botTurn();
 
-        heading.textContent = "TICTACTOE";
+        document.getElementById("heading_text").textContent = "Tic Tac Toe";
     }
 
     // TODO: landing page screen
