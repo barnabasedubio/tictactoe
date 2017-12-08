@@ -144,7 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let restart = document.getElementsByClassName("restart")[0];
     let i = 0;
     restart.addEventListener("click", function() {
-        console.log(++i);
+        // console.log(++i);
+        clearBoard();
     });
 
     function updateGameState(iconType, index) {
@@ -682,10 +683,31 @@ document.addEventListener("DOMContentLoaded", function () {
                                 }
                             }
                         } else {
+                            // check if you can win
+                            let position = (botMoveArray[0] + botMoveArray[2]) / 2;
+                            if (isInt(position) && checkIfEmpty(position)) {
+                                placeSymbolAtIndex(icon, position);
+                                gameOver("win");
+                                break;
+                            }
+                            let position2 = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
+                            if (position2 >= 0 && position2 < 9 && checkIfEmpty(position2)) {
+                                placeSymbolAtIndex(icon, position2);
+                                gameOver("win");
+                                break;
+                            }
+                            let position3 = 3 * botMoveArray[2] - (botMoveArray[2] + botMoveArray[0]);
+                            if (position3 >= 0 && position3 < 9 && checkIfEmpty(position3)) {
+                                placeSymbolAtIndex(icon, position3);
+                                gameOver("win");
+                                break;
+                            }
+
                             // just check if at this point there is any potential match point, and counter.
                             for (let i = 0; i < 9; i++) {
                                 if (i === 4) continue;
                                 if (gameStateArray[i] === "x") {
+                                    console.log("Looking at index: " + i);
                                     if (checkIfEmpty(12 - (4 + i))) {
                                         placeSymbolAtIndex(icon, 12 - (4 + i));
                                         botMoveArray.push(12 - (4 + i));
@@ -694,7 +716,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         }
                     }
-
+                    break;
             }
         }
         // toggleTilt(true);
@@ -740,6 +762,26 @@ document.addEventListener("DOMContentLoaded", function () {
         if (type === "win") console.log("bot wins BOOYAH");
         else console.log("it's a tie");
         gameIsOver = true;
+    }
+
+    // reset the game
+    function clearBoard() {
+        let xIcons = document.getElementsByClassName("x-icon");
+        let oIcons = document.getElementsByClassName("o-icon");
+
+        while (xIcons[0]) {
+            xIcons[0].parentNode.removeChild(xIcons[0]);
+        }
+        while (oIcons[0]) {
+            oIcons[0].parentNode.removeChild(oIcons[0]);
+        }
+        for (let entry of gameStateArray) {
+            entry = " ";
+        }
+        playerMoveArray = [];
+        botMoveArray = [];
+        moveRound = 0;
+        gameIsOver = false;
     }
 
     // TODO: landing page screen
