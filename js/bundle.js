@@ -696,7 +696,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 break;
                             }
 
-                            // just check if at this point there is any potential match point, and counter.
+                            // check if at this point there is any potential match point, and counter.
                             for (let i = 0; i < 9; i++) {
                                 if (i === 4) continue;
                                 if (gameStateArray[i] === "x") {
@@ -704,7 +704,16 @@ document.addEventListener("DOMContentLoaded", function () {
                                     if (checkIfEmpty(12 - (4 + i))) {
                                         placeSymbolAtIndex(icon, 12 - (4 + i));
                                         botMoveArray.push(12 - (4 + i));
+                                        break;
                                     }
+                                }
+                            }
+                            // no match point, nobody can win, just choose a random field and occupy it.
+                            for (let i = 1; i < 9; i++) {
+                                if (checkIfEmpty(i)) {
+                                    placeSymbolAtIndex(icon, i);
+                                    botMoveArray.push(i);
+                                    break;
                                 }
                             }
                         }
