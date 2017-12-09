@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     Array.prototype.forEach.call(boxes, function(box, i) {
         box.addEventListener("click", function () {
-            if (!box.children.length && playerTurn) { // no symbols in the box
+            if (!box.children.length && playerTurn && !gameIsOver) { // no symbols in the box
                 let symbol = document.createElement("div");
                 if (playerBegins) {
                     symbol.setAttribute("class", "x-icon");
@@ -664,6 +664,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     else if (playerMoveArray[0] === 4) {
                         // the final stretch. The only way the player can win is through the middle
+
                         if (playerMoveArray[1] % 2 === 0) {
                             // player plays to a diagonal, really easy case, just choose any edge.
                             for (let i = 1; i < 9; i += 2) {
@@ -675,22 +676,24 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         } else {
                             // check if you can win
-                            let position = (botMoveArray[0] + botMoveArray[2]) / 2;
-                            if (isInt(position) && checkIfEmpty(position)) {
-                                placeSymbolAtIndex(icon, position);
+                            let position1 = (botMoveArray[0] + botMoveArray[2]) / 2;
+                            let position2 = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
+                            let position3 = 3 * botMoveArray[2] - (botMoveArray[2] + botMoveArray[0]);
+                            let placeFound = false;
+
+                            if (isInt(position1) && checkIfEmpty(position1)) {
+                                placeSymbolAtIndex(icon, position1);
                                 gameOver("win");
                                 break;
                             }
 
-                            let position2 = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
-                            if (position2 >= 0 && position2 < 9 && checkIfEmpty(position2)) {
+                            else if (position2 >= 0 && position2 < 9 && checkIfEmpty(position2)) {
                                 placeSymbolAtIndex(icon, position2);
                                 gameOver("win");
                                 break;
                             }
 
-                            let position3 = 3 * botMoveArray[2] - (botMoveArray[2] + botMoveArray[0]);
-                            if (position3 >= 0 && position3 < 9 && checkIfEmpty(position3)) {
+                            else if (position3 >= 0 && position3 < 9 && checkIfEmpty(position3)) {
                                 placeSymbolAtIndex(icon, position3);
                                 gameOver("win");
                                 break;
@@ -700,20 +703,24 @@ document.addEventListener("DOMContentLoaded", function () {
                             for (let i = 0; i < 9; i++) {
                                 if (i === 4) continue;
                                 if (gameStateArray[i] === "x") {
-                                    console.log("Looking at index: " + i);
                                     if (checkIfEmpty(12 - (4 + i))) {
                                         placeSymbolAtIndex(icon, 12 - (4 + i));
                                         botMoveArray.push(12 - (4 + i));
+                                        placeFound = true;
                                         break;
                                     }
                                 }
                             }
-                            // no match point, nobody can win, just choose a random field and occupy it.
-                            for (let i = 1; i < 9; i++) {
-                                if (checkIfEmpty(i)) {
-                                    placeSymbolAtIndex(icon, i);
-                                    botMoveArray.push(i);
-                                    break;
+
+                            if (!placeFound) {
+                                // no match point, nobody can win, just choose a random field and occupy it.
+                                for (let i = 1; i < 9; i++) {
+                                    if (checkIfEmpty(i)) {
+                                        placeSymbolAtIndex(icon, i);
+                                        console.log("blaa");
+                                        botMoveArray.push(i);
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -757,11 +764,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function gameOver(type) {
         if (type === "win") {
             console.log("bot wins");
-            document.getElementById("heading_text").textContent = "Bot wins!";
+            document.getElementById("heading_content").textContent = "Bot wins!";
         }
         else {
             console.log("it's a tie");
-            document.getElementById("heading_text").textContent = "Tie game.";
+            document.getElementById("heading_content").textContent = "Tie game.";
         }
         gameIsOver = true;
     }
@@ -782,7 +789,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!playerBegins) botTurn();
 
-        document.getElementById("heading_text").textContent = "Tic Tac Toe";
+        document.getElementById("heading_content").textContent = "Tic Tac Toe";
     }
 
     // TODO: landing page screen
