@@ -103,6 +103,8 @@ body {
   outline: none;
   padding-bottom: 3rem;
   border: 2px solid white; }
+  .restart:hover {
+    background: rgba(0, 0, 0, 0.4); }
 
 .tilt {
   transform-style: preserve-3d; }
