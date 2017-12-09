@@ -719,6 +719,8 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("heading_content").textContent = "It's a tie.";
         }
         gameIsOver = true;
+        if (playerBegins) playerBegins = false;
+        else playerBegins = true;
     }
 
     // reset the game
@@ -743,6 +745,4 @@ document.addEventListener("DOMContentLoaded", function () {
             boxes[i].style.backgroundColor = "rgba(82, 69, 94, 0.3)";
         }
     }
-
-    // TODO: landing page / restart page screen
 });
