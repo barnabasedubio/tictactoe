@@ -80,22 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
         scale: 1.15
     });
 
-    /*
-    function toggleTilt(flag) {
-        let tiltElements = document.querySelectorAll(".tilt");
-        if (flag) {
-            tilt.init(tiltElements, { // create tilt elements
-                max: 25, // tilt angle
-                speed: 60, // zoom-out speed
-                scale: 1.15
-            });
-        } else {
-            Array.prototype.forEach.call(tiltElements, function(tiltElement) {
-                tiltElement.vanillaTilt.destroy(); // lock game board until bot finished move
-            });
-        }
-    } */
-
     let playerBegins = true,
         gameIsOver = false,
         playerTurn = false;
@@ -726,6 +710,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                     break;
+
+                case 9:
+                    gameOver("tie");
             }
         }
         // toggleTilt(true);
@@ -765,10 +752,40 @@ document.addEventListener("DOMContentLoaded", function () {
         if (type === "win") {
             console.log("bot wins");
             document.getElementById("heading_content").textContent = "Bot wins!";
+            // find winning configuration and emphasize it with styling
+            let configuration1 = [0, 1, 2],
+                configuration2 = [3, 4, 5],
+                configuration3 = [6, 7, 8],
+                configuration4 = [0, 3, 6],
+                configuration5 = [1, 4, 7],
+                configuration6 = [2, 5, 8],
+                configuration7 = [0, 4, 8],
+                configuration8 = [2, 4, 6];
+
+            let icon = (playerBegins) ? "o" : "x";
+
+            let configurations = [configuration1, configuration2, configuration3,
+                                  configuration4, configuration5, configuration6,
+                                  configuration7, configuration8];
+
+            for (let conf of configurations) {
+                let count = 0;
+                for (let index of conf) {
+                    if (gameStateArray[index] === icon) count++;
+                }
+                if (count === 3) { // found winning configuration
+                    for (let index2 of conf) {
+                        let box = boxes[index2];
+                        box.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+                    }
+                    break;
+                }
+            }
+
         }
         else {
             console.log("it's a tie");
-            document.getElementById("heading_content").textContent = "Tie game.";
+            document.getElementById("heading_content").textContent = "It's a tie.";
         }
         gameIsOver = true;
     }
@@ -790,9 +807,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!playerBegins) botTurn();
 
         document.getElementById("heading_content").textContent = "Tic Tac Toe";
+
+        for (let i = 0; i < 9; i++) {
+            boxes[i].style.backgroundColor = "rgba(82, 69, 94, 0.3)";
+        }
     }
 
-    // TODO: landing page screen
+    // TODO: landing page / restart page screen
 });
 
 /***/ }),
