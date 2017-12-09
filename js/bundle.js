@@ -808,7 +808,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!playerBegins) botTurn();
 
-        document.getElementById("heading_content").textContent = "Tic Tac Toe";
+        document.getElementById("heading_content").textContent = "Tic Tac Toe.";
 
         for (let i = 0; i < 9; i++) {
             boxes[i].style.backgroundColor = "rgba(82, 69, 94, 0.3)";
