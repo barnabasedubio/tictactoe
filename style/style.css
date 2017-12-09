@@ -1,5 +1,5 @@
 h1, h2, h3, h4, h5, h6 {
-  color: #525252;
+  color: white;
   font-family: Gabriola, sans-serif;
   font-weight: 100; }
 
@@ -10,7 +10,8 @@ h3 {
   font-size: 2rem; }
 
 html {
-  height: 99.9%; }
+  height: 99.9%;
+  background: linear-gradient(to right, #355C7D, #6c5b7b, #c06c84); }
 
 body {
   border: 1px solid transparent;
@@ -50,8 +51,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #525252;
-  background-color: #D1D1D1;
+  border: 2px solid white;
+  background-color: rgba(82, 69, 94, 0.3);
   height: 8rem;
   width: 8rem;
   cursor: pointer; }
@@ -63,7 +64,7 @@ body {
   .x-icon:after {
     content: "";
     height: 8rem;
-    border-left: 2px solid #525252;
+    border-left: 2px solid white;
     position: absolute;
     left: 2.95rem;
     top: -15px;
@@ -71,7 +72,7 @@ body {
   .x-icon:before {
     content: "";
     height: 8rem;
-    border-left: 2px solid #525252;
+    border-left: 2px solid white;
     position: absolute;
     left: 2.95rem;
     top: -15px;
@@ -81,16 +82,16 @@ body {
   width: 6rem;
   height: 6rem;
   border-radius: 7rem;
-  border: 2px solid #525252; }
+  border: 2px solid white; }
 
 .x-icon, .o-icon {
   transform: translateZ(20px); }
 
 .restart {
+  border: 2px solid white;
+  background-color: rgba(82, 69, 94, 0.3);
   display: block;
-  border: 2px solid #525252;
-  background-color: #D1D1D1;
-  color: #525252;
+  color: white;
   position: relative;
   top: 22%;
   width: 10rem;
@@ -100,7 +101,8 @@ body {
   font: 2rem Gabriola, sans-serif;
   cursor: pointer;
   outline: none;
-  padding-bottom: 3rem; }
+  padding-bottom: 3rem;
+  border: 2px solid white; }
 
 .tilt {
   transform-style: preserve-3d; }

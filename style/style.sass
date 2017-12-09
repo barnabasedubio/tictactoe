@@ -2,16 +2,22 @@
 $light-gray: #D1D1D1
 $gray: #95989A
 $dark-gray: #525252
-$background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84)
+$background: linear-gradient(to right, #355C7D, #6c5b7b, #c06c84)
 $font: Gabriola, sans-serif
+$box-background: rgba(82, 69, 94, 0.3)
 
 @mixin centerItems()
   display: flex
   justify-content: center
   align-items: center
 
+@mixin boxDesign()
+  border: 2px solid white
+  background-color: $box-background
+
+
 h1, h2, h3, h4, h5, h6
-  color: $dark-gray
+  color: white
   font-family: $font
   font-weight: 100
 
@@ -22,7 +28,7 @@ h3
 
 html
   height: 99.9%
-//background: $background
+  background: $background
 
 body
   border: 1px solid transparent // so that the page doesn't scroll...wtf why does this work?
@@ -57,8 +63,7 @@ body
 
 .row-box
   @include centerItems
-  border: 2px solid $dark-gray
-  background-color: $light-gray
+  @include boxDesign
   height: 8rem
   width: 8rem
   cursor: pointer
@@ -67,7 +72,7 @@ body
 @mixin  closeIcon()
   content: ""
   height: 8rem
-  border-left: 2px solid $dark-gray
+  border-left: 2px solid white
   position: absolute
   left: 2.95rem
   top: -15px
@@ -87,16 +92,15 @@ body
   width: 6rem
   height: 6rem
   border-radius: 7rem
-  border: 2px solid $dark-gray
+  border: 2px solid white
 
 .x-icon, .o-icon
   transform: translateZ(20px)
 
 .restart
+  @include boxDesign
   display: block // or else margin: 0 auto won't work
-  border: 2px solid $dark-gray
-  background-color: $light-gray
-  color: $dark-gray
+  color: white
   position: relative
   top: 22%
   width: 10rem
@@ -107,6 +111,7 @@ body
   cursor: pointer
   outline: none
   padding-bottom: 3rem
+  border: 2px solid white
 
 .tilt
   transform-style: preserve-3d
