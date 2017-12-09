@@ -682,7 +682,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function gameOver(type) {
         if (type === "win") {
             console.log("bot wins");
-            document.getElementById("heading_content").textContent = "Bot wins!";
+            document.getElementById("heading_content").textContent = "Better luck next time.";
             // find winning configuration and emphasize it with styling
             let configuration1 = [0, 1, 2],
                 configuration2 = [3, 4, 5],
