@@ -53,6 +53,7 @@ body {
   align-items: center;
   border: 2px solid white;
   background-color: rgba(82, 69, 94, 0.3);
+  transition: background-color 0.5s ease;
   height: 8rem;
   width: 8rem;
   cursor: pointer; }
@@ -90,6 +91,7 @@ body {
 .restart {
   border: 2px solid white;
   background-color: rgba(82, 69, 94, 0.3);
+  transition: background-color 0.5s ease;
   display: block;
   color: white;
   position: relative;
@@ -104,7 +106,7 @@ body {
   padding-bottom: 3rem;
   border: 2px solid white; }
   .restart:hover {
-    background: rgba(0, 0, 0, 0.4); }
+    background-color: rgba(0, 0, 0, 0.4); }
 
 .tilt {
   transform-style: preserve-3d; }
