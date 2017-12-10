@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let restart = document.getElementsByClassName("restart")[0];
 
     if (playerBegins) playerTurn = true;
-    else botTurn();
+    else {
+        setTimeout(botTurn, 800);
+    }
 
 
     Array.prototype.forEach.call(boxes, function(box, i) {
@@ -48,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 moveRound++;
                 playerTurn = false;
                 playerMoveArray.push(i);
-                botTurn()
+                setTimeout(botTurn, 800);
             }
         });
     });
@@ -122,10 +124,17 @@ document.addEventListener("DOMContentLoaded", function () {
                              * the player is countering the bot's attempt to win. That will in turn put the player
                              * in a position to win, and if the bot counters that position, the game is pretty much over. */
 
-                            let position = (botMoveArray[1] === 0 || botMoveArray[1] === 8) ?
-                                botMoveArray[1] - botMoveArray[0] : botMoveArray[1] + botMoveArray[0];
-                            placeSymbolAtIndex(icon, (Math.abs(position)+2) % 12);
-                            botMoveArray.push((Math.abs(position)+2) % 12);
+                            if (playerMoveArray[0] === 5 && playerMoveArray[1] === 8) { // hard-coding edge case
+                                placeSymbolAtIndex(icon, 2);
+                                botMoveArray.push(2);
+
+                            } else {
+                                let position = (botMoveArray[1] === 0 || botMoveArray[1] === 8) ?
+                                    botMoveArray[1] - botMoveArray[0] : botMoveArray[1] + botMoveArray[0];
+                                console.log("placing at position: " + (Math.abs(position)+2) % 12);
+                                placeSymbolAtIndex(icon, (Math.abs(position)+2) % 12);
+                                botMoveArray.push((Math.abs(position)+2) % 12);
+                            }
 
                         } else {
                             // player played both moves in corners, is now in match position -> counter
@@ -719,8 +728,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("heading_content").textContent = "It's a tie.";
         }
         gameIsOver = true;
-        if (playerBegins) playerBegins = false;
-        else playerBegins = true;
+        playerBegins = !playerBegins;
     }
 
     // reset the game
@@ -737,7 +745,9 @@ document.addEventListener("DOMContentLoaded", function () {
         moveRound = 0;
         gameIsOver = false;
 
-        if (!playerBegins) botTurn();
+        if (!playerBegins) {
+            setTimeout(botTurn, 800);
+        }
 
         document.getElementById("heading_content").textContent = "Tic Tac Toe.";
 
