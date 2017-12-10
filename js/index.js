@@ -445,7 +445,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         position = 3 * botMoveArray[1] - (botMoveArray[1] + botMoveArray[2]);
                         console.log("position: " + position);
-                        if (position !== 1 && position >= 0 && position < 9 && checkIfEmpty(position)) {
+                        if (position !== 1 && position >= 0 && position < 9 && checkIfEmpty(position) &&
+                            botMoveArray[1] !== 6 && botMoveArray[2] !== 5) {
                             // position !== 1 because of some fucking edge case >.<
                             placeSymbolAtIndex(icon, position);
                             gameOver("win");
