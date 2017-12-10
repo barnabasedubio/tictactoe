@@ -98,11 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let boxes = document.querySelectorAll(".row-box");
     let restart = document.getElementsByClassName("restart")[0];
 
-    if (playerBegins) playerTurn = true;
-    else {
-        setTimeout(botTurn, 800);
-    }
-
+    checkIfBegins();
 
     Array.prototype.forEach.call(boxes, function(box, i) {
         box.addEventListener("click", function () {
@@ -119,7 +115,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 moveRound++;
                 playerTurn = false;
                 playerMoveArray.push(i);
-                setTimeout(botTurn, 800);
+                // so that there is no delay before saying "tie game"
+                if (moveRound !== 9) setTimeout(botTurn, 800);
+                else botTurn();
             }
         });
     });
@@ -193,17 +191,10 @@ document.addEventListener("DOMContentLoaded", function () {
                              * the player is countering the bot's attempt to win. That will in turn put the player
                              * in a position to win, and if the bot counters that position, the game is pretty much over. */
 
-                            if (playerMoveArray[0] === 5 && playerMoveArray[1] === 8) { // hard-coding edge case
-                                placeSymbolAtIndex(icon, 2);
-                                botMoveArray.push(2);
-
-                            } else {
-                                let position = (botMoveArray[1] === 0 || botMoveArray[1] === 8) ?
-                                    botMoveArray[1] - botMoveArray[0] : botMoveArray[1] + botMoveArray[0];
-                                console.log("placing at position: " + (Math.abs(position)+2) % 12);
-                                placeSymbolAtIndex(icon, (Math.abs(position)+2) % 12);
-                                botMoveArray.push((Math.abs(position)+2) % 12);
-                            }
+                            let position = (botMoveArray[1] === 0 || botMoveArray[1] === 8) ?
+                                botMoveArray[1] - botMoveArray[0] : botMoveArray[1] + botMoveArray[0];
+                            placeSymbolAtIndex(icon, (Math.abs(position+2)) % 12);
+                            botMoveArray.push((Math.abs(position+2)) % 12);
 
                         } else {
                             // player played both moves in corners, is now in match position -> counter
@@ -814,14 +805,20 @@ document.addEventListener("DOMContentLoaded", function () {
         moveRound = 0;
         gameIsOver = false;
 
-        if (!playerBegins) {
-            setTimeout(botTurn, 800);
-        }
+        checkIfBegins();
 
         document.getElementById("heading_content").textContent = "Tic Tac Toe.";
 
         for (let i = 0; i < 9; i++) {
             boxes[i].style.backgroundColor = "rgba(82, 69, 94, 0.3)";
+        }
+    }
+
+    function checkIfBegins() {
+        if (playerBegins) playerTurn = true;
+        else {
+            playerTurn = false;
+            setTimeout(botTurn, 800);
         }
     }
 });
