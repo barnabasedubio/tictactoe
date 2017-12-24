@@ -116,14 +116,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 playerTurn = false;
                 playerMoveArray.push(i);
                 // so that there is no delay before saying "tie game"
-                if (moveRound !== 9) setTimeout(botTurn, 800);
+                if (moveRound !== 9) setTimeout(botTurn, 400);
                 else botTurn();
             }
         });
     });
 
     restart.addEventListener("click", function() {
-        clearBoard();
+        if (playerTurn) clearBoard();
     });
 
     function updateGameState(iconType, index) {
@@ -819,7 +819,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (playerBegins) playerTurn = true;
         else {
             playerTurn = false;
-            setTimeout(botTurn, 800);
+            setTimeout(botTurn, 400);
         }
     }
 });
